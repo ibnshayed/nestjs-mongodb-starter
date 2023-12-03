@@ -1,7 +1,7 @@
 export const JwtConfiguration = () => ({
   accessToken: {
     secret: process.env.ACCESS_TOKEN_SECRET || 'accessToken-secret',
-    expireIn: process.env.ACCESS_EXPIRE_IN || '2m',
+    expireIn: process.env.ACCESS_EXPIRE_IN || '1d',
   },
   refreshToken: {
     secret: process.env.REFRESH_TOKEN_SECRET || 'refreshToken-secret',

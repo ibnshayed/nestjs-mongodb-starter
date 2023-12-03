@@ -6,6 +6,7 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -22,8 +23,8 @@ export class ResponseInterceptor implements NestInterceptor {
 
   errorHandler(exception: HttpException, context: ExecutionContext) {
     const ctx = context.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
     const status =
       exception instanceof HttpException
@@ -32,6 +33,7 @@ export class ResponseInterceptor implements NestInterceptor {
 
     response.status(status).json({
       status: false,
+      method: request.method,
       statusCode: status,
       path: request.url,
       message: exception.message,
@@ -41,13 +43,14 @@ export class ResponseInterceptor implements NestInterceptor {
 
   responseHandler(res: any, context: ExecutionContext) {
     const ctx = context.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
-    const statusCode = response.statusCode;
+    const statusCode = request.method === 'POST' ? 200 : response.statusCode;
 
     return {
       status: true,
+      method: request.method,
       path: request.url,
       statusCode,
       result: res,
