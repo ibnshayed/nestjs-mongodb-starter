@@ -9,7 +9,7 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true, versionKey: false })
 export class User {
-  @Prop({ trim: true })
+  @Prop({ trim: true, unique: true })
   username: string;
 
   @Prop({ trim: true, select: false })
@@ -21,10 +21,10 @@ export class User {
   @Prop({ trim: true })
   lastName: string;
 
-  @Prop({ trim: true })
+  @Prop({ trim: true, unique: true })
   mobile: string;
 
-  @Prop({ trim: true })
+  @Prop({ trim: true, unique: true })
   email: string;
 
   @Prop({ trim: true })

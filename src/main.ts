@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import compression from 'compression';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { ResponseInterceptor } from './common';
 
 async function bootstrap() {
   const logger = new Logger('main.ts', { timestamp: true });
@@ -13,7 +14,7 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
     const port = configService.get('port');
-
+    app.useGlobalInterceptors(new ResponseInterceptor());
     app.enableCors();
     app.enableVersioning({
       type: VersioningType.URI,
