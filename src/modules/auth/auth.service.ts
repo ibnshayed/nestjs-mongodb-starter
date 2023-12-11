@@ -13,12 +13,12 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  private async getAccessToken(user: UserEntity): Promise<string> {
+  private async getAccessToken(user: UserEntity) {
     return await this.jwtService.signAsync(
       {
         _id: user._id,
-        // resetToken: user.resetToken,
-        // updateToken: user.updateToken,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
       {
         secret: this.configService.get('accessToken.secret'),
@@ -27,11 +27,10 @@ export class AuthService {
     );
   }
 
-  private async getRefreshToken(user: UserEntity): Promise<string> {
+  private async getRefreshToken(user: UserEntity) {
     return await this.jwtService.signAsync(
       {
         _id: user._id,
-        // resetToken: user.resetToken,
       },
       {
         secret: this.configService.get('refreshToken.secret'),
@@ -46,7 +45,7 @@ export class AuthService {
       filter: {
         $or: [{ username }, { email: username }, { mobile: username }],
       },
-      projection: '+password username _id',
+      projection: '_id +password username firstName lastName',
     });
 
     if (!user) {

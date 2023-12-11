@@ -20,5 +20,6 @@ export interface UserEntity {
   gender: GenderEnum;
   permissions: PermissionEnum[];
 
+  resetToken?: boolean;
   status?: boolean;
 }

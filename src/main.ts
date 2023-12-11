@@ -11,9 +11,9 @@ async function bootstrap() {
   const logger = new Logger('main.ts', { timestamp: true });
   try {
     const app = await NestFactory.create(AppModule);
-
     const configService = app.get(ConfigService);
     const port = configService.get('port');
+
     app.useGlobalInterceptors(new ResponseInterceptor());
     app.enableCors();
     app.enableVersioning({
@@ -36,7 +36,6 @@ async function bootstrap() {
       .setTitle('All Apis')
       .setDescription('Nest Basic app api documentation')
       .setVersion('1.0')
-      // .addTag('cats')
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);

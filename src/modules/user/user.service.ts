@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DataServices } from './../../repository';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, FindOneUserDto, PaginateUserDto } from './dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly db: DataServices) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log(
-      '🚀 ~ file: user.service.ts:10 ~ UserService ~ create ~ createUserDto:',
-      createUserDto,
-    );
     const user = {
       username: createUserDto.username,
       password: createUserDto.password,
@@ -29,27 +24,31 @@ export class UserService {
       gender: createUserDto.gender,
       permissions: createUserDto.permissions,
     };
-    const newUser = await this.db.user.createOne(user);
-    console.log(
-      '🚀 ~ file: user.service.ts:33 ~ UserService ~ create ~ newUser:',
-      newUser,
-    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...newUser } = await this.db.user.createOne(user);
     return newUser;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(dto: PaginateUserDto) {
+    const { page, limit } = dto;
+    const data = await this.db.user.findManyWithPaginate(page, limit, {});
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(dto: FindOneUserDto) {
+    const { id } = dto;
+    return this.db.user.findOne({
+      filter: {
+        _id: id,
+      },
+    });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
 }

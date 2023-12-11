@@ -7,27 +7,27 @@ import { GenderEnum, PermissionEnum, RoleEnum } from './../../common';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema({ timestamps: true, versionKey: false })
+@Schema({ timestamps: true, versionKey: false, minimize: false })
 export class User {
-  @Prop({ trim: true, unique: true })
+  @Prop({ type: String, trim: true, unique: true })
   username: string;
 
-  @Prop({ trim: true, select: false })
+  @Prop({ type: String, trim: true, select: false })
   password: string;
 
-  @Prop({ trim: true })
+  @Prop({ type: String, trim: true })
   firstName: string;
 
-  @Prop({ trim: true })
+  @Prop({ type: String, trim: true })
   lastName: string;
 
-  @Prop({ trim: true, unique: true })
+  @Prop({ type: String, trim: true, unique: true })
   mobile: string;
 
-  @Prop({ trim: true, unique: true })
+  @Prop({ type: String, trim: true, unique: true })
   email: string;
 
-  @Prop({ trim: true })
+  @Prop({ type: String, trim: true })
   nid: string;
 
   @Prop({ trim: true })
@@ -60,7 +60,10 @@ export class User {
   })
   permissions: PermissionEnum[];
 
-  @Prop({ default: true })
+  @Prop({ type: Boolean, default: false })
+  resetToken: boolean;
+
+  @Prop({ type: Boolean, default: true })
   status: boolean;
 }
 
