@@ -41,7 +41,7 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
 
     await app.listen(port);
-    logger.log(`Server started on port ${port}`);
+    logger.log(`Server started on port ${await app.getUrl()}`);
   } catch (error) {
     logger.error(error.stack);
   }
